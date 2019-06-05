@@ -2,7 +2,8 @@ package swing2;
 
 import java.util.EventObject;
 
-//every action events are coming here !!!
+//every action events from Form are coming here !!!
+
 public class FormEvent extends EventObject {
 
 	private String name;
@@ -11,6 +12,9 @@ public class FormEvent extends EventObject {
 	//the list
 	private int ageCategory;
 	
+	//the comboBox
+	private String empCat;
+	
 	//add cunnstructor - form event Object
 	public FormEvent(Object source) {
 		super(source);
@@ -18,13 +22,14 @@ public class FormEvent extends EventObject {
 	}
 	
 	
-	////////// Having my own cunstructor
+	////////// Having my own cunstructor ---> have a direct relationship with Okbtn.Onclick
 	
-	public FormEvent(Object source, String name,String occupation, int ageCat) {
+	public FormEvent(Object source, String name,String occupation, int ageCat, String empCat) {
 		super(source);
 		this.name=name;
 		this.occupation=occupation;
 		this.ageCategory = ageCat; 
+		this.empCat= empCat;
 	}
 
 	public String getName() {
@@ -45,6 +50,9 @@ public class FormEvent extends EventObject {
 	
 	public int getAgeCategory() {
 		return ageCategory;
+	}
+	public String getEmploymentCategory() {
+		return empCat;
 	}
 	
 	

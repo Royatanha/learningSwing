@@ -9,8 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -26,6 +28,7 @@ public class FormPanel extends JPanel {
 	private JButton okBtn;
 	private FormListener formListener;
 	private JList ageList;
+	private JComboBox empCombo;
 
 	public FormPanel() {
 		Dimension dim= getPreferredSize();
@@ -43,6 +46,7 @@ public class FormPanel extends JPanel {
 		nameField= new JTextField(10); //number of characters
 		occupationField= new JTextField(10);
 		ageList = new JList();
+		empCombo= new JComboBox();
 		
 		//*************************  List Box *********************
 		
@@ -74,6 +78,15 @@ public class FormPanel extends JPanel {
 
 		//*******************************
 		
+		// ********** Setup ComboBox
+		DefaultComboBoxModel empModel = new DefaultComboBoxModel();
+		empModel.addElement("Emplyoed");
+		empModel.addElement("Self-Emplyoed");
+		empModel.addElement("unEmplyoed");
+		empCombo.setModel(empModel);
+		empCombo.setSelectedIndex(0);
+		empCombo.setEditable(true);
+		
 		okBtn= new JButton("Ok");
 		
 		okBtn.addActionListener(new ActionListener() {
@@ -83,11 +96,15 @@ public class FormPanel extends JPanel {
 				String occupation= occupationField.getText();
 				//String ageCat = (String)ageList.getSelectedValue(); //(String) because I know all the values inside list are strings
 				AgeCategory ageCat= (AgeCategory)ageList.getSelectedValue();
+				//event for Combobox
+				String empCat= (String)empCombo.getSelectedItem();
 				
 				
-				System.out.print(ageCat.getId());
 				
-				FormEvent ev= new FormEvent(this, name, occupation, ageCat.getId());
+				System.out.print("ageCart" + ageCat.getId());
+				System.out.println("comboCat"+ empCat);
+				
+				FormEvent ev= new FormEvent(this, name, occupation, ageCat.getId(), empCat);
 				if(formListener !=null) {
 					formListener.formEventOccured(ev); //use the set
 				}
@@ -95,8 +112,12 @@ public class FormPanel extends JPanel {
 		});
 		
 		
+		layoutComponents();
 		
-		
+	
+	}
+	
+	public void layoutComponents() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints gc= new GridBagConstraints();
 		
@@ -104,51 +125,77 @@ public class FormPanel extends JPanel {
 		gc.fill= GridBagConstraints.NONE; //width= 100%
 		
 		//////////////// first Row
+		gc.gridy= 0;
+		
 		gc.weightx= 1 ; //control how much space to relative cells
 		gc.weighty= 0.1;
 		
 		gc.gridx= 0;
-		gc.gridy= 0;
+		
 		gc.anchor= GridBagConstraints.LINE_END; //Justify
 		gc.insets= new Insets(0, 0, 0, 5); // top left buttom right Margin!
 		add(nameLable, gc);
 		
 		gc.gridx=1;
-		gc.gridy=0;
 		gc.anchor= GridBagConstraints.LINE_START;
 		gc.insets= new Insets(0, 0, 0, 0);
 		add(nameField, gc);
 		
 		////////////// Second Row
+		gc.gridy++;
 		gc.weightx= 1 ; //control how much space to relative cells
 		gc.weighty= 0.1;
 		
 		gc.gridx=0;
-		gc.gridy=1;
+
 		gc.anchor= GridBagConstraints.LINE_END;
 		gc.insets= new Insets(0, 0, 0, 5);
 		add(occupationLable, gc);
 		
 		gc.gridx=1;
-		gc.gridy=1;
 		gc.anchor= GridBagConstraints.LINE_START;
 		gc.insets= new Insets(0, 0, 0, 0);
 		add(occupationField, gc);
 		
-//////////////Third Row
+////////////// nexRow - list
+		gc.gridy++;
+		
 		gc.weightx= 1 ; //control how much space to relative cells
 		gc.weighty= 0.2;
-		gc.gridy=2;
+		
+		gc.gridx=0;
+		gc.anchor=GridBagConstraints.FIRST_LINE_END;
+		gc.insets= new Insets(0, 0, 0, 5);
+		add(new JLabel("Age:"),gc); //produce Lable on the fly !
+		
 		gc.gridx=1;
 		gc.anchor=GridBagConstraints.FIRST_LINE_START;
 		add(ageList,gc);
+		
+		
+//////////////nexRow - combo
+	gc.gridy++;
 	
-		//////////// Forth Row
+	gc.weightx= 1 ; //control how much space to relative cells
+	gc.weighty= 0.2;
+	
+	gc.gridx=0;
+	gc.anchor=GridBagConstraints.FIRST_LINE_END;
+	gc.insets= new Insets(0, 0, 0, 5);
+	add(new JLabel("Employment:"),gc); //produce Lable on the fly !
+	
+	
+	gc.gridx=1;
+	gc.anchor=GridBagConstraints.FIRST_LINE_START;
+	add(empCombo,gc);
+	
+		//////////// next Row
+		gc.gridy++;
 		
 		gc.weightx= 1 ; //control how much space to relative cells
-		gc.weighty= 2.0;
-		gc.gridy=3;
-		gc.gridx=1;
+		gc.weighty= 1;
+		
+
 		gc.anchor=GridBagConstraints.FIRST_LINE_START;
 		add(okBtn,gc);
 	}
