@@ -1,4 +1,4 @@
-package swing2;
+package gui;
 
 import java.awt.BorderLayout;
 

@@ -1,4 +1,4 @@
-package swing2;
+package gui;
 
 //Changing the dim in layoutManager
 import java.awt.Dimension;
@@ -9,15 +9,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+
+import com.sun.glass.events.KeyEvent;
+
+import sun.management.jdp.JdpGenericPacket;
 
 public class FormPanel extends JPanel {
 	
@@ -29,6 +36,13 @@ public class FormPanel extends JPanel {
 	private FormListener formListener;
 	private JList ageList;
 	private JComboBox empCombo;
+	private JCheckBox citizenCheck;
+	private JTextField taxfield;
+	private JLabel taxLabel;
+	private JRadioButton maleRadio;
+	private JRadioButton femaleRadio;
+	private ButtonGroup genderGroup;
+	
 
 	public FormPanel() {
 		Dimension dim= getPreferredSize();
@@ -47,19 +61,38 @@ public class FormPanel extends JPanel {
 		occupationField= new JTextField(10);
 		ageList = new JList();
 		empCombo= new JComboBox();
+		citizenCheck = new JCheckBox("DE Citizen?");
+		taxfield= new JTextField(10);
+		taxLabel= new JLabel("Tax ID:");
+		maleRadio= new JRadioButton("Male");
+		femaleRadio= new JRadioButton("Female");
+		genderGroup= new ButtonGroup();
+		
+		//Setting up Radiobutton genderGroup
+		
+		genderGroup.add(maleRadio);
+		genderGroup.add(femaleRadio);
+		femaleRadio.setSelected(true); //set as default selected Radio Button
+		maleRadio.setActionCommand("Male");
+		femaleRadio.setActionCommand("Female");
+		
+		
+		//Setting up Checkbox Taxt ID (set tax label and field enable when the checkbox is checked)
+		
+		taxLabel.setEnabled(false);
+		taxfield.setEnabled(false);
+		citizenCheck.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				boolean isTicked= citizenCheck.isSelected();
+				taxfield.setEnabled(isTicked);
+				taxLabel.setEnabled(isTicked);
+			}
+		});
 		
 		//*************************  List Box *********************
 		
 		DefaultListModel ageModel= new DefaultListModel();
-		
-		/*
-		 * Before using AgeCategory Class
-		 * 
-		 * 
-		ageModel.addElement("under 18");
-		ageModel.addElement("18 to 35");
-		ageModel.addElement("over 35");
-		*/
 		
 		ageModel.addElement(new AgeCategory(0, "under 18"));
 		ageModel.addElement(new AgeCategory(1, "18 to 35"));
@@ -76,18 +109,26 @@ public class FormPanel extends JPanel {
 		ageList.setPreferredSize(new Dimension(110,70));
 		ageList.setBorder(BorderFactory.createEtchedBorder());
 
-		//*******************************
+
 		
 		// ********** Setup ComboBox
 		DefaultComboBoxModel empModel = new DefaultComboBoxModel();
 		empModel.addElement("Emplyoed");
 		empModel.addElement("Self-Emplyoed");
-		empModel.addElement("unEmplyoed");
+		empModel.addElement("UnEmplyoed");
 		empCombo.setModel(empModel);
 		empCombo.setSelectedIndex(0);
 		empCombo.setEditable(true);
 		
+		
 		okBtn= new JButton("Ok");
+		
+		//setup Mnemonics for ok 
+		okBtn.setMnemonic(KeyEvent.VK_O);
+		
+		//Set Mnemonics for Namelabel which focuses on nameField
+		nameLable.setDisplayedMnemonic(KeyEvent.VK_N);
+		nameLable.setLabelFor(nameField);
 		
 		okBtn.addActionListener(new ActionListener() {
 		
@@ -98,13 +139,13 @@ public class FormPanel extends JPanel {
 				AgeCategory ageCat= (AgeCategory)ageList.getSelectedValue();
 				//event for Combobox
 				String empCat= (String)empCombo.getSelectedItem();
+				//checkbox
+				boolean usCitizen=(boolean)citizenCheck.isSelected(); //checkbox
+				String taxId= (String)taxfield.getText();
+				//Radiobutton GenderGroup
+				String genderCommand= genderGroup.getSelection().getActionCommand();
 				
-				
-				
-				System.out.print("ageCart" + ageCat.getId());
-				System.out.println("comboCat"+ empCat);
-				
-				FormEvent ev= new FormEvent(this, name, occupation, ageCat.getId(), empCat);
+				FormEvent ev= new FormEvent(this, name, occupation, ageCat.getId(), empCat, usCitizen,taxId, genderCommand);
 				if(formListener !=null) {
 					formListener.formEventOccured(ev); //use the set
 				}
@@ -174,21 +215,59 @@ public class FormPanel extends JPanel {
 		
 		
 //////////////nexRow - combo
-	gc.gridy++;
+		gc.gridy++;
+		
+		gc.weightx= 1 ; //control how much space to relative cells
+		gc.weighty= 0.2;
+		
+		gc.gridx=0;
+		gc.anchor=GridBagConstraints.FIRST_LINE_END;
+		gc.insets= new Insets(0, 0, 0, 5);
+		add(new JLabel("Employment:"),gc); //produce Lable on the fly !
+		
+		
+		gc.gridx=1;
+		gc.anchor=GridBagConstraints.FIRST_LINE_START;
+		add(empCombo,gc);
+		
+//////////////nexRow - checkbox
+		gc.gridy++;
+		
+		gc.weightx= 0.1 ; //control how much space to relative cells
+		gc.weighty= 0.05;
+		
+		gc.gridx=1;
+		gc.anchor=GridBagConstraints.FIRST_LINE_START;
+		add(citizenCheck,gc);
 	
-	gc.weightx= 1 ; //control how much space to relative cells
-	gc.weighty= 0.2;
+		gc.gridy++;
+		
+		gc.gridx=0;
+		gc.anchor=GridBagConstraints.FIRST_LINE_END;
+		gc.insets= new Insets(0, 0, 0, 5);
+		add(taxLabel,gc); 
+		
+		
+		gc.gridx=1;
+		gc.anchor=GridBagConstraints.FIRST_LINE_START;
+		add(taxfield,gc);
+		
+//////////////nexRow - Radiobutton Gender
+		gc.gridy++;
+		
+		gc.weightx= 0.1 ; //control how much space to relative cells
+		gc.weighty= 0.05;
+		
+		gc.gridx=1;
+		gc.anchor=GridBagConstraints.FIRST_LINE_START;
+		add(maleRadio,gc);
 	
-	gc.gridx=0;
-	gc.anchor=GridBagConstraints.FIRST_LINE_END;
-	gc.insets= new Insets(0, 0, 0, 5);
-	add(new JLabel("Employment:"),gc); //produce Lable on the fly !
-	
-	
-	gc.gridx=1;
-	gc.anchor=GridBagConstraints.FIRST_LINE_START;
-	add(empCombo,gc);
-	
+		gc.gridy++;
+		
+		
+		gc.gridx=1;
+		gc.anchor=GridBagConstraints.FIRST_LINE_START;
+		add(femaleRadio,gc);
 		//////////// next Row
 		gc.gridy++;
 		

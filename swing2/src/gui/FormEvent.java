@@ -1,4 +1,4 @@
-package swing2;
+package gui;
 
 import java.util.EventObject;
 
@@ -15,6 +15,13 @@ public class FormEvent extends EventObject {
 	//the comboBox
 	private String empCat;
 	
+	//the Checkbox
+	private String taxId;
+	private boolean usCitizen;
+	
+	//Radio Button
+	private String gender;
+	
 	//add cunnstructor - form event Object
 	public FormEvent(Object source) {
 		super(source);
@@ -24,13 +31,26 @@ public class FormEvent extends EventObject {
 	
 	////////// Having my own cunstructor ---> have a direct relationship with Okbtn.Onclick
 	
-	public FormEvent(Object source, String name,String occupation, int ageCat, String empCat) {
+	public FormEvent(Object source, String name,String occupation, int ageCat, String empCat, boolean usCitizen, String taxId, String gender) {
 		super(source);
 		this.name=name;
 		this.occupation=occupation;
 		this.ageCategory = ageCat; 
 		this.empCat= empCat;
+		this.usCitizen= usCitizen;
+		this.taxId= taxId;
+		this.gender= gender;
 	}
+
+	public String getGender() {
+		return gender;
+	}
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 
 	public String getName() {
 		return name;
@@ -53,6 +73,41 @@ public class FormEvent extends EventObject {
 	}
 	public String getEmploymentCategory() {
 		return empCat;
+	}
+
+
+	public String getEmpCat() {
+		return empCat;
+	}
+
+
+	public void setEmpCat(String empCat) {
+		this.empCat = empCat;
+	}
+
+
+	public String getTaxId() {
+		return taxId;
+	}
+
+
+	public void setTaxId(String taxId) {
+		this.taxId = taxId;
+	}
+
+
+	public boolean isUsCitizen() {
+		return usCitizen;
+	}
+
+
+	public void setUsCitizen(boolean usCitizen) {
+		this.usCitizen = usCitizen;
+	}
+
+
+	public void setAgeCategory(int ageCategory) {
+		this.ageCategory = ageCategory;
 	}
 	
 	
