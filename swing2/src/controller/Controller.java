@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import gui.FormEvent;
@@ -80,4 +82,15 @@ public class Controller {
 		//textPanel.appendText( "\n" +"name: "+ name + "\n" + "occupation:" + occupation + "\n" + "AgeCategory" + ageCat +  "\n" + "Employment: " + empCat +  "\n" + "Tax ID: " + taxId +  "\n" + "Gender: " + gender );
 		
 	}
+	
+	//Savw to File and retrieve from File , code writen in Databse - Model
+	public void saveToFile(File file) throws IOException {
+		db.saveToFile(file);
+		
+	}
+	
+	public void loadFromFile(File file) throws IOException {
+		db.loadFromFile(file);
+	}
+
 }

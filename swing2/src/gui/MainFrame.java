@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -127,6 +128,12 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 					System.out.println("the ChosenFile is :" + fileChooser.getSelectedFile());
+					try {
+						controller.loadFromFile(fileChooser.getSelectedFile());
+						tablePanel.refresh();
+					} catch (IOException e1) {
+					JOptionPane.showMessageDialog(MainFrame.this, "Could not Load Data from File", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
@@ -135,6 +142,11 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 					System.out.println("the Exported File is :" + fileChooser.getSelectedFile());
+					try {
+						controller.saveToFile(fileChooser.getSelectedFile());
+					} catch (IOException e1) {
+					JOptionPane.showMessageDialog(MainFrame.this, "Could not Save Data to File", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
