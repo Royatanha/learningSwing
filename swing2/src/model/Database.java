@@ -10,15 +10,20 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class Database {
 	
-	private ArrayList<Person> people;
+	//private ArrayList<Person> people;
+	private List<Person> people; // Linkedlist is optimized to add and remove the list objects
 	
 	public Database() {
-		people= new ArrayList<Person>();
+		//people= new ArrayList<Person>();
+		people= new LinkedList<Person>();
 	}
 	
 	public void addPerson(Person person) {
@@ -26,7 +31,7 @@ public class Database {
 	}
 	
 	public List<Person> getPeople() {
-		return people;
+		return Collections.unmodifiableList(people); //prevent other Classes to modify the List -> for forcing to have a clear Data Row
 	}
 	
 	// Saving the array List of People to a File 

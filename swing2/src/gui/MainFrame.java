@@ -41,7 +41,8 @@ public class MainFrame extends JFrame {
 		formPanel = new FormPanel();
 		setJMenuBar(createMenuBar());
 		tablePanel= new TablePanel();
-		
+		 
+		//De
 		 
 		
 		//open Dialog File
@@ -154,10 +155,15 @@ public class MainFrame extends JFrame {
 		//adding Mnemonic
 		fileMenu.setMnemonic(KeyEvent.VK_F); //the Mnemonic is ALT + F
 		windowMenu.setMnemonic(KeyEvent.VK_W);
-		//exitItem.setMnemonic(KeyEvent.VK_X);
+		exitItem.setMnemonic(KeyEvent.VK_X);
+		
 		
 		//Adding Accelator --> without opening the menu you can Close the form 
 		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+		importDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,ActionEvent.CTRL_MASK));
+		exportDataItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+		
+		
 		
 		//closing Window on Exit
 		exitItem.addActionListener(new ActionListener() {
