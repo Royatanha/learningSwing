@@ -13,7 +13,7 @@ import model.Person;
 
 public class Controller {
 
-	Database db= new Database();
+	static Database db= new Database();
 	
 	public List<Person> getPeople() {
 		return db.getPeople(); //to get people and show them on the Table
@@ -65,10 +65,10 @@ public class Controller {
 		
 		
 		Gender genderCat;
-		if(gender.equals("male")) {
+		if(gender.equals("Male")) {
 			genderCat= Gender.male;
 		}
-		else if(gender.equals("female")){
+		else if(gender.equals("Female")){
 			genderCat= Gender.female;
 		}
 		else {
@@ -82,6 +82,10 @@ public class Controller {
 		//textPanel.appendText( "\n" +"name: "+ name + "\n" + "occupation:" + occupation + "\n" + "AgeCategory" + ageCat +  "\n" + "Employment: " + empCat +  "\n" + "Tax ID: " + taxId +  "\n" + "Gender: " + gender );
 		
 	}
+	
+	public static void removePerson(int index) {
+		db.removePerson(index);
+	};
 	
 	//Savw to File and retrieve from File , code writen in Databse - Model
 	public void saveToFile(File file) throws IOException {

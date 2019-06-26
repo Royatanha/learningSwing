@@ -28,6 +28,7 @@ public class MainFrame extends JFrame {
 	private JFileChooser fileChooser;
 	private Controller controller; //interface between Model and Gui
 	private TablePanel tablePanel;
+	private PrefsDialog prefsDialog;
 	
 	
 	public MainFrame() {
@@ -41,8 +42,14 @@ public class MainFrame extends JFrame {
 		formPanel = new FormPanel();
 		setJMenuBar(createMenuBar());
 		tablePanel= new TablePanel();
+		prefsDialog= new PrefsDialog(this);
 		 
-		//De
+	//Adding an action listener to a popupbutton deleteRow
+		tablePanel.setPersonTableListener((new PersonTableListener(){
+			public void rowDeleted(int row) {
+				Controller.removePerson(row);
+			}
+		}));
 		 
 		
 		//open Dialog File
@@ -79,7 +86,7 @@ public class MainFrame extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//close window
 		//setSize(500, 600); because the form goes Mental
-		setMinimumSize(new Dimension(500,400));
+		setMinimumSize(new Dimension(1000,600));
 		setVisible(true);
 		
 	}
@@ -101,7 +108,7 @@ public class MainFrame extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(exitItem);
 		
-	
+		JMenuItem prefsItem= new JMenuItem("Preferences..."); //... because it opens a dialog
 		//sub menu under Window
 		JMenu showMenu= new JMenu("Show");
 		//JMenuItem showFormItem= new JMenuItem("Person Form");
@@ -110,6 +117,7 @@ public class MainFrame extends JFrame {
 		showMenu.add(showFormItem);
 		
 		windowMenu.add(showMenu);
+		windowMenu.add(prefsItem);
 		
 		menuBar.add(fileMenu);
 		menuBar.add(windowMenu);
@@ -119,6 +127,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent ev) {
 				JCheckBoxMenuItem menuItem= (JCheckBoxMenuItem) ev.getSource(); //check if the menu Item is Selected
 				formPanel.setVisible(menuItem.isSelected()); 
+				
+			}
+		});
+		
+		prefsItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				prefsDialog.setVisible(true);
 				
 			}
 		});

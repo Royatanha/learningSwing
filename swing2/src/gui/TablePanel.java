@@ -19,6 +19,7 @@ public class TablePanel extends JPanel {
 	private JTable table;
 	private PersonTableModel tableModel; //the AbstractTableModel
 	private JPopupMenu popup;
+	private PersonTableListener personTableListener; //when sth select table row- a reference to the listener
 	
 	public TablePanel () {
 		
@@ -49,11 +50,15 @@ public class TablePanel extends JPanel {
 			
 		});
 		
+		//remove Table Row on select
 		removeItem.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
 				int row= table.getSelectedRow();
-				System.out.println(row);
+				
+				if(personTableListener != null) {
+					personTableListener.rowDeleted(row);
+					tableModel.fireTableRowsDeleted(row, row);
+				}
 				
 			}
 		});
@@ -71,5 +76,9 @@ public void setData(List<Person> db) {
 //Refresh panel everytime the db changes
 public void refresh() {
 	tableModel.fireTableDataChanged();
+}
+
+public void setPersonTableListener(PersonTableListener listener) {
+	this.personTableListener= listener; //it knows that if someone rightclick on table and select remove...
 }
 }

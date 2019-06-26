@@ -30,6 +30,10 @@ public class Database {
 		people.add(person);
 	}
 	
+	public void removePerson(int index) {
+		people.remove(index); //remove people based on their index
+	}
+	
 	public List<Person> getPeople() {
 		return Collections.unmodifiableList(people); //prevent other Classes to modify the List -> for forcing to have a clear Data Row
 	}
